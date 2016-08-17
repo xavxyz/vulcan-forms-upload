@@ -1,2 +1,2 @@
 # nova-upload
-:telescope: Telescope Nova package to upload files to S3
+:telescope: Telescope Nova package extending nova:forms to upload images to Cloudinary from a drop zone.

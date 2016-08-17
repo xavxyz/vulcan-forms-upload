@@ -1,6 +1,6 @@
 Package.describe({
   name: "xavcz:nova-forms-upload",
-  summary: "Telescope upload to S3 input/dropzone package",
+  summary: "Telescope Nova package extending nova:forms to upload images to Cloudinary from a drop zone.",
   version: "0.26.5-nova",
   git: 'https://github.com/xavcz/nova-forms-upload.git'
 });

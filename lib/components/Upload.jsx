@@ -1,8 +1,9 @@
 import React, { PropTypes, Component } from 'react';
-import FRC from 'formsy-react-components';
-import DropZone from 'react-dropzone';
+// import FRC from 'formsy-react-components';
+import Dropzone from 'react-dropzone';
 
-const Input = FRC.Input;
+// const Input = FRC.Input;
+
 
 class Upload extends Component {
 
@@ -13,11 +14,35 @@ class Upload extends Component {
 
     this.state = {
       value: props.value,
+      uploadedFile: "",
     }
   }
 
   onDrop(files) {
-    console.log('Received files: ', files);
+    this.setState({
+      ...this.state,
+      uploadedFile: files[0],
+    });
+
+    const preset = this.props.preset;
+    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${Telescope.settings.get("cloudinaryCloudName")}/upload`;
+
+    const body = new FormData();
+    body.append("file", files[0]);
+    body.append("upload_preset", preset);
+
+    fetch(cloudinaryUrl, {
+      method: "POST",
+      body,
+    })
+    .then(res => res.json())
+    .then(body => {
+      this.setState({
+        ...this.state,
+        value: body.secure_url,
+      });
+    })
+    .catch(err => console.log("err", err));
   }
 
   render() {
@@ -27,11 +52,28 @@ class Upload extends Component {
       <div className="form-group row">
         <label className="control-label col-sm-3">{label}</label>
         <div className="col-sm-9">
-          <div className="tags-field">
-            <Dropzone onDrop={this.onDrop}>
-              <div>Upload test.</div>
+          <div className="upload-field">
+            <Dropzone ref="dropzone" 
+              multiple={false} 
+              onDrop={this.onDrop}
+              accept="image/*"
+              className="dropzone-base"
+              activeClassName="dropzone-active"
+              rejectClassName="dropzone-reject"
+            >
+              <div>Drop an image here, or click to select an image to upload.</div>
             </Dropzone>
-            <Input name={name} type="hidden" readOnly value={this.state.value} />
+            
+            {this.state.uploadedFile ? 
+              <div className="upload-state">
+                {this.state.value ? 
+                  <img style={{height: 120}} src={this.state.value} />
+                : <div>
+                    <span>Uploading your file...</span>
+                    <img style={{height: 120}} src={this.state.uploadedFile.preview} />
+                  </div>}
+              </div> 
+            : null}
           </div>
         </div>
       </div>

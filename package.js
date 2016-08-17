@@ -11,8 +11,13 @@ Package.onUse( function(api) {
 
   api.use([
     'nova:core@0.26.5-nova',
-    'nova:forms@0.26.5-nova'
+    'nova:forms@0.26.5-nova',
+    'fourseven:scss@3.8.0_1'
   ]);
+
+  api.addFiles([
+    "lib/components/Upload.scss"
+  ], "client");
 
   api.mainModule("lib/export.js", ["client", "server"]);
 

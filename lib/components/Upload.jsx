@@ -1,9 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-// import FRC from 'formsy-react-components';
+import Telescope from 'meteor/nova:lib';
 import Dropzone from 'react-dropzone';
-
-// const Input = FRC.Input;
-
 
 class Upload extends Component {
 
@@ -13,44 +10,56 @@ class Upload extends Component {
     this.onDrop = this.onDrop.bind(this);
 
     this.state = {
+      uploading: false,
       value: props.value,
-      uploadedFile: "",
     }
   }
 
   onDrop(files) {
+    // set the component in upload mode with the preview
     this.setState({
-      ...this.state,
-      uploadedFile: files[0],
+      value: files[0].preview,
+      uploading: true,
     });
 
-    const preset = this.props.preset;
+    // request url to cloudinary
     const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${Telescope.settings.get("cloudinaryCloudName")}/upload`;
 
+    // request body
     const body = new FormData();
     body.append("file", files[0]);
-    body.append("upload_preset", preset);
+    body.append("upload_preset", this.props.options.preset);
 
+    // post request to cloudinary
     fetch(cloudinaryUrl, {
       method: "POST",
       body,
     })
-    .then(res => res.json())
+    .then(res => res.json()) // json-ify the readable strem
     .then(body => {
+      // use the https:// url given by cloudinary
+      const avatarUrl = body.secure_url;
+      
+      // tell NovaForm to catch the value
+      this.props.updateCurrentValue(this.props.name, avatarUrl);
+
+      // set the uploading status to false
       this.setState({
-        ...this.state,
-        value: body.secure_url,
+        uploading: false,
+        value: avatarUrl,
       });
+      
     })
     .catch(err => console.log("err", err));
   }
 
   render() {
-    const { name, label, value } = this.props;
+    // show the actual uploaded image or the preview
+    const { uploading, value } = this.state;
 
     return (
       <div className="form-group row">
-        <label className="control-label col-sm-3">{label}</label>
+        <label className="control-label col-sm-3">{this.props.label}</label>
         <div className="col-sm-9">
           <div className="upload-field">
             <Dropzone ref="dropzone" 
@@ -64,14 +73,10 @@ class Upload extends Component {
               <div>Drop an image here, or click to select an image to upload.</div>
             </Dropzone>
             
-            {this.state.uploadedFile ? 
+            {value ? 
               <div className="upload-state">
-                {this.state.value ? 
-                  <img style={{height: 120}} src={this.state.value} />
-                : <div>
-                    <span>Uploading your file...</span>
-                    <img style={{height: 120}} src={this.state.uploadedFile.preview} />
-                  </div>}
+                {uploading ? <span>Uploading your file...</span> : null}
+                <img style={{height: 120}} src={value} />
               </div> 
             : null}
           </div>
@@ -85,6 +90,6 @@ Upload.propTypes = {
   name: React.PropTypes.string,
   value: React.PropTypes.any,
   label: React.PropTypes.string
-}
+};
 
 export default Upload;

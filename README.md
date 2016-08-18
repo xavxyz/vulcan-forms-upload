@@ -10,7 +10,8 @@ Want to add this to your Nova instance? Read below:
 #### 1. Meteor package
 I would recommend that you clone this repo in your Nova's `/packages` folder. 
 
-And then modify the `packages` file in `.meteor/packages`. 
+In `.meteor/packages` file, add at the end of the **Optional packages** section:
+`xavcz:nova-forms-upload` 
 
 *Note: You can also add it via the classic `meteor add xavcz:nova-forms-upload`, however you may encounter load order issue.*
 

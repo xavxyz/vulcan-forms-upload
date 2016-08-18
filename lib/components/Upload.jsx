@@ -8,18 +8,25 @@ class Upload extends Component {
     super(props);
 
     this.onDrop = this.onDrop.bind(this);
+    this.clearImage = this.clearImage.bind(this);
 
     this.state = {
+      preview: '',
       uploading: false,
-      value: props.value,
+      value: props.value || '',
     }
+  }
+
+  componentWillMount() {
+    this.props.updateCurrentValue(this.props.name, this.props.value || '');
   }
 
   onDrop(files) {
     // set the component in upload mode with the preview
     this.setState({
-      value: files[0].preview,
+      preview: files[0].preview,
       uploading: true,
+      value: '',
     });
 
     // request url to cloudinary
@@ -40,22 +47,33 @@ class Upload extends Component {
       // use the https:// url given by cloudinary
       const avatarUrl = body.secure_url;
       
-      // tell NovaForm to catch the value
-      this.props.updateCurrentValue(this.props.name, avatarUrl);
-
       // set the uploading status to false
       this.setState({
+        preview: '',
         uploading: false,
         value: avatarUrl,
       });
-      
+
+      // tell NovaForm to catch the value
+      this.props.updateCurrentValue(this.props.name, avatarUrl);
     })
     .catch(err => console.log("err", err));
   }
 
+  clearImage(e) {
+    e.preventDefault();
+    this.props.updateCurrentValue(this.props.name, '');
+    this.setState({
+      preview: '',
+      value: '',
+    });
+  }
+
   render() {
+    const { uploading, preview, value } = this.state;
+
     // show the actual uploaded image or the preview
-    const { uploading, value } = this.state;
+    const image = preview || value;
 
     return (
       <div className="form-group row">
@@ -73,10 +91,11 @@ class Upload extends Component {
               <div>Drop an image here, or click to select an image to upload.</div>
             </Dropzone>
             
-            {value ? 
+            {image ? 
               <div className="upload-state">
-                {uploading ? <span>Uploading your file...</span> : null}
-                <img style={{height: 120}} src={value} />
+                {uploading ? <span>Uploading... Preview:</span> : null}
+                {value ? <a onClick={this.clearImage}><Telescope.components.Icon name="close"/> Remove image</a> : null}
+                <img style={{height: 120}} src={image} />
               </div> 
             : null}
           </div>

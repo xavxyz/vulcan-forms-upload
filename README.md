@@ -62,4 +62,7 @@ Feel free to contribute to add new features and flexibility to this package :)
 
 You are welcome to come chat about it [on the Telescope Slack chatroom](http://slack.telescopeapp.org)
 
+## What about `nova:cloudinary` ?
+This package and `nova:cloudinary` share a settings in common: `cloudinaryCloudName`. They are fully compatible.
+
 Happy hacking! 🚀

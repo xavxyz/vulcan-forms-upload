@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import Telescope from 'meteor/nova:lib';
 import Dropzone from 'react-dropzone';
+import checkSettings from '../utils.js';
 
 class Upload extends Component {
 
@@ -70,8 +71,13 @@ class Upload extends Component {
   }
 
   render() {
-    const { uploading, preview, value } = this.state;
 
+    if (!checkSettings()) {
+      console.log('[xavcz:nova-forms-upload] Your settings are not well configured to use this package. Please fix it or remove the package.');
+      return null;
+    }
+
+    const { uploading, preview, value } = this.state;
     // show the actual uploaded image or the preview
     const image = preview || value;
 

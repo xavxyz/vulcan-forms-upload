@@ -5,9 +5,9 @@
 
 Want to add this to your Nova instance? Read below:
 
-## Installation
+# Installation
 
-#### 1. Meteor package
+### 1. Meteor package
 I would recommend that you clone this repo in your Nova's `/packages` folder. 
 
 In `.meteor/packages` file, add at the end of the **Optional packages** section:
@@ -15,13 +15,13 @@ In `.meteor/packages` file, add at the end of the **Optional packages** section:
 
 *Note: You can also add it via the classic `meteor add xavcz:nova-forms-upload`, however you may encounter load order issue.*
 
-#### 2. NPM dependency
+### 2. NPM dependency
 This package depends on the awesome `react-dropzone` ([repo](https://github.com/okonet/react-dropzone)), you need to install the dependency: 
 ```
 npm install react-dropzone
 ```
 
-#### 3. Cloudinary account
+### 3. Cloudinary account
 Create a [Cloudinary account](https://cloudinary.com) if you don't have one. 
 
 The upload to Cloudinary relies on **unsigned upload**:
@@ -36,7 +36,7 @@ It may look like this:
 
 ![Screenshot-Cloudinary](https://res.cloudinary.com/xavcz/image/upload/v1471534183/Capture_d_e%CC%81cran_2016-08-18_17.07.52_tr9uoh.png)
 
-#### 4. Nova Settings
+### 4. Nova Settings
 Edit your `settings.json` and add inside the `public: { ... }` block the following entries with your own credentials:
 
 ```json
@@ -55,9 +55,10 @@ public: {
 
 Picture upload in Nova is now enabled! Easy-peasy, right? 👯
 
+# Custom fields
 You can now use the `Upload` component as a classic form extension with [custom fields](https://www.youtube.com/watch?v=1yTT48xaSy8) like `nova:forms-tags` or `nova:embedly`.
 
-### Image for posts
+## Image for posts
 Let's say you want to enhance your posts with a custom image. In your custom package, your new custom field could look like this: 
 
 ```js

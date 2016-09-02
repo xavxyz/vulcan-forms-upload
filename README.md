@@ -41,21 +41,105 @@ Edit your `settings.json` and add inside the `public: { ... }` block the followi
 
 ```json
 public: {
-  ...
+  
+  
   "cloudinaryCloudName": "YOUR_APP_NAME",
   "cloudinaryPresets": {
-    "avatar": "YOUR_PRESET_ID"
+    "avatar": "YOUR_PRESET_ID",
+    "posts": "ANOTHER_PRESET_ID" // or maybe the same
   }
+
+
 }
 ```
 
 Picture upload in Nova is now enabled! Easy-peasy, right? 👯
 
-## How to use?
+You can now use the `Upload` component as a classic form extension with [custom fields](https://www.youtube.com/watch?v=1yTT48xaSy8) like `nova:forms-tags` or `nova:embedly`.
 
-This is a classic form extension with [custom fields](https://www.youtube.com/watch?v=1yTT48xaSy8) like `nova:form-tags` or `nova:embedly`.
+### Image for posts
+Let's say you want to enhance your posts with a custom image. In your custom package, your new custom field could look like this: 
 
-This package extends out-of-the-box the `nova:users` package to provide avatar upload for your users (as an experiment and a demonstration).
+```js
+// ... your imports
+import Telescope from 'meteor/nova:lib';
+import Users from 'meteor/nova:users';
+import Upload from 'meteor/xavcz:nova-forms-upload'
+
+// ... your permissions
+const canInsert = user => Users.canDo(user, "posts.new");
+const canEdit = Users.canEdit;
+
+// extends Posts schema with a new field: 'image' 🏖
+Posts.addField({
+  fieldName: 'image',
+  fieldSchema: {
+    type: String,
+    optional: true,
+    publish: true,
+    control: Upload,
+    insertableIf: canInsert,
+    editableIf: canEdit,
+    autoform: {
+      options: {
+        preset: Telescope.settings.get('cloudinaryPresets').posts // this setting refers to the transformation you want to apply to the image
+      },
+    }
+  }
+});
+
+PublicationUtils.addToFields(Posts.publishedFields.list, ["image"]);
+```
+
+## Avatar for users
+Let's say you want to enable your users to upload their own avatar. In your custom package, your new custom field could look like this: 
+```js
+// ... your imports
+import Telescope from 'meteor/nova:lib';
+import Users from 'meteor/nova:users';
+import Upload from 'meteor/xavcz:nova-forms-upload'
+
+// ... your permissions
+const canInsert = user => Users.canDo(user, "users.new");
+const canEdit = Users.canEdit;
+
+// extends Users schema with a new field: 'telescope.avatar' 👁
+Users.addField({
+  fieldName: 'telescope.avatar',
+  fieldSchema: {
+    type: String,
+    optional: true,
+    publish: true,
+    control: Upload,
+    insertableIf: canInsert,
+    editableIf: canEdit,
+    autoform: {
+      options: {
+        preset: Telescope.settings.get('cloudinaryPresets').avatar // this setting refers to the transformation you want to apply to the image
+      },
+    }
+  }
+});
+
+// publish this new field
+PublicationUtils.addToFields(Users.publishedFields.list, ['telescope.avatar']);
+```
+
+Adding the opportunity to upload an avatar comes with a trade-off: you also need to extend the behavior of the `Users.avatar` methods. You can do this by using this snippet:
+
+```js
+const originalAvatarConstructor = Users.avatar;
+
+// extends the Users.avatar function
+Users.avatar = {
+  ...originalAvatarConstructor,
+  getUrl(user) {
+    url = originalAvatarConstructor.getUrl(user);
+
+    return !!user && user.telescope && user.telescope.avatar ? user.telescope.avatar : url;
+  }
+} 
+```
 
 ## S3? Google Cloud?
 Feel free to contribute to add new features and flexibility to this package :)

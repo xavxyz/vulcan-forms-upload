@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import Telescope from 'meteor/nova:lib';
 import Dropzone from 'react-dropzone';
-import checkSettings from '../utils.js';
 
 class Upload extends Component {
 

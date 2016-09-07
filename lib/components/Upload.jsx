@@ -18,7 +18,7 @@ class Upload extends Component {
   }
 
   componentWillMount() {
-    this.props.updateCurrentValue(this.props.name, this.props.value || '');
+    this.context.addToAutofilledValues({[this.props.name]: this.props.value || ''});
   }
 
   onDrop(files) {
@@ -55,14 +55,14 @@ class Upload extends Component {
       });
 
       // tell NovaForm to catch the value
-      this.props.updateCurrentValue(this.props.name, avatarUrl);
+      this.context.addToAutofilledValues({[this.props.name]: avatarUrl});
     })
     .catch(err => console.log("err", err));
   }
 
   clearImage(e) {
     e.preventDefault();
-    this.props.updateCurrentValue(this.props.name, '');
+    this.context.addToAutofilledValues({[this.props.name]: ''});
     this.setState({
       preview: '',
       value: '',
@@ -70,11 +70,6 @@ class Upload extends Component {
   }
 
   render() {
-
-    if (!checkSettings()) {
-      console.log('[xavcz:nova-forms-upload] Your settings are not well configured to use this package. Please fix it or remove the package.');
-      return null;
-    }
 
     const { uploading, preview, value } = this.state;
     // show the actual uploaded image or the preview
@@ -115,5 +110,9 @@ Upload.propTypes = {
   value: React.PropTypes.any,
   label: React.PropTypes.string
 };
+
+Upload.contextTypes = {
+  addToAutofilledValues: React.PropTypes.func,
+}
 
 export default Upload;

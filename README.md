@@ -81,7 +81,7 @@ Posts.addField({
     control: Upload,
     insertableIf: canInsert,
     editableIf: canEdit,
-    autoform: {
+    form: {
       options: {
         preset: Telescope.settings.get('cloudinaryPresets').posts // this setting refers to the transformation you want to apply to the image
       },
@@ -114,7 +114,7 @@ Users.addField({
     control: Upload,
     insertableIf: canInsert,
     editableIf: canEdit,
-    autoform: {
+    form: {
       options: {
         preset: Telescope.settings.get('cloudinaryPresets').avatar // this setting refers to the transformation you want to apply to the image
       },

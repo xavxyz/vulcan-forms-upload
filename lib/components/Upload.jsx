@@ -1,6 +1,7 @@
-import React, { PropTypes, Component } from 'react';
 import Telescope from 'meteor/nova:lib';
+import React, { PropTypes, Component } from 'react';
 import Dropzone from 'react-dropzone';
+import 'isomorphic-fetch';
 
 class Upload extends Component {
 

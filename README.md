@@ -13,12 +13,10 @@ I would recommend that you clone this repo in your Nova's `/packages` folder.
 In `.meteor/packages` file, add at the end of the **Optional packages** section:
 `xavcz:nova-forms-upload` 
 
-*Note: You can also add it via the classic `meteor add xavcz:nova-forms-upload`, however you may encounter load order issue.*
-
 ### 2. NPM dependency
 This package depends on the awesome `react-dropzone` ([repo](https://github.com/okonet/react-dropzone)), you need to install the dependency: 
 ```
-npm install react-dropzone
+npm install react-dropzone isomorphic-fetch
 ```
 
 ### 3. Cloudinary account

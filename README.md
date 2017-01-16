@@ -64,6 +64,7 @@ Let's say you want to enhance your posts with a custom image. In your custom pac
 import Telescope from 'meteor/nova:lib';
 import Users from 'meteor/nova:users';
 import Upload from 'meteor/xavcz:nova-forms-upload'
+import PublicationUtils from 'meteor/utilities:smart-publications' // only if you use Nova v0.27.5 (not needed for Apollo version)
 
 // ... your permissions
 const canInsert = user => Users.canDo(user, "posts.new");
@@ -87,6 +88,7 @@ Posts.addField({
   }
 });
 
+// only if you use Nova v0.27.5 (not needed for Apollo version)
 PublicationUtils.addToFields(Posts.publishedFields.list, ["image"]);
 ```
 
@@ -120,11 +122,11 @@ Users.addField({
   }
 });
 
-// publish this new field
+// publish this new field, only if you use Nova v0.27.5 (not needed for Apollo version)
 PublicationUtils.addToFields(Users.publishedFields.list, ['telescope.avatar']);
 ```
 
-Adding the opportunity to upload an avatar comes with a trade-off: you also need to extend the behavior of the `Users.avatar` methods. You can do this by using this snippet:
+Adding the opportunity to upload an avatar comes with a trade-off: you also need to extend the behavior of the `Users.avatar` methods. You can do this by adding this snippet, in `custom_fields.js` for instance:
 
 ```js
 const originalAvatarConstructor = Users.avatar;

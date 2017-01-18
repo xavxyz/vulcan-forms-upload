@@ -1,7 +1,7 @@
-import Telescope from 'meteor/nova:lib';
+import { Components, getSetting, registerComponent } from 'meteor/nova:lib';
 import React, { PropTypes, Component } from 'react';
 import Dropzone from 'react-dropzone';
-import 'isomorphic-fetch';
+import 'isomorphic-fetch'; // patch for browser which don't have fetch implemented
 
 class Upload extends Component {
 
@@ -31,7 +31,7 @@ class Upload extends Component {
     });
 
     // request url to cloudinary
-    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${Telescope.settings.get("cloudinaryCloudName")}/upload`;
+    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${getSetting("cloudinaryCloudName")}/upload`;
 
     // request body
     const body = new FormData();
@@ -95,7 +95,7 @@ class Upload extends Component {
             {image ? 
               <div className="upload-state">
                 {uploading ? <span>Uploading... Preview:</span> : null}
-                {value ? <a onClick={this.clearImage}><Telescope.components.Icon name="close"/> Remove image</a> : null}
+                {value ? <a onClick={this.clearImage}><Components.Icon name="close"/> Remove image</a> : null}
                 <img style={{height: 120}} src={image} />
               </div> 
             : null}
@@ -116,4 +116,4 @@ Upload.contextTypes = {
   addToAutofilledValues: React.PropTypes.func,
 }
 
-export default Upload;
+registerComponent('Upload', Upload);

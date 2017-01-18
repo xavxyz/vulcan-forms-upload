@@ -1,6 +1,7 @@
 # nova-upload
 🏖🔭 Telescope Nova package extending `nova:forms` to upload images to Cloudinary from a drop zone.
 
+
 ![Screenshot](https://res.cloudinary.com/xavcz/image/upload/v1471534203/Capture_d_e%CC%81cran_2016-08-17_14.22.14_ehwv0d.png)
 
 Want to add this to your Nova instance? Read below:
@@ -10,8 +11,16 @@ Want to add this to your Nova instance? Read below:
 ### 1. Meteor package
 I would recommend that you clone this repo in your Nova's `/packages` folder. 
 
-In `.meteor/packages` file, add at the end of the **Optional packages** section:
+Then, open the `.meteor/packages` file and add at the end of the **Optional packages** section:
 `xavcz:nova-forms-upload` 
+
+> **Note:** This is the version for Nova 1.0.0, running with GraphQL. *If you are looking for a version compatible with Nova "classic", you'll need to change the package's branch, like below. Then, refer to [the README for `nova-forms-upload` on Nova Classic](https://github.com/xavcz/nova-forms-upload/blob/nova-classic/README.md#installation)*
+
+```bash
+# only for Nova classic users (v0.27.5)
+cd nova-forms-upload
+git checkout nova-classic
+```
 
 ### 2. NPM dependency
 This package depends on the awesome `react-dropzone` ([repo](https://github.com/okonet/react-dropzone)), you need to install the dependency: 
@@ -44,7 +53,7 @@ public: {
   "cloudinaryCloudName": "YOUR_APP_NAME",
   "cloudinaryPresets": {
     "avatar": "YOUR_PRESET_ID",
-    "posts": "ANOTHER_PRESET_ID" // or maybe the same
+    "posts": "THE_SAME_OR_ANOTHER_PRESET_ID"
   }
 
 
@@ -56,19 +65,15 @@ Picture upload in Nova is now enabled! Easy-peasy, right? 👯
 # Custom fields
 You can now use the `Upload` component as a classic form extension with [custom fields](https://www.youtube.com/watch?v=1yTT48xaSy8) like `nova:forms-tags` or `nova:embedly`.
 
+**⚠️ Note:** Don't forget to update your query fragments wherever needed after defining your custom fields, else they will never be available!
+
 ## Image for posts
 Let's say you want to enhance your posts with a custom image. In your custom package, your new custom field could look like this: 
 
 ```js
 // ... your imports
-import Telescope from 'meteor/nova:lib';
-import Users from 'meteor/nova:users';
-import Upload from 'meteor/xavcz:nova-forms-upload'
-import PublicationUtils from 'meteor/utilities:smart-publications' // only if you use Nova v0.27.5 (not needed for Apollo version)
-
-// ... your permissions
-const canInsert = user => Users.canDo(user, "posts.new");
-const canEdit = Users.canEdit;
+import { getComponent } from 'meteor/nova:lib';
+import Posts from 'meteor/nova:posts';
 
 // extends Posts schema with a new field: 'image' 🏖
 Posts.addField({
@@ -76,10 +81,10 @@ Posts.addField({
   fieldSchema: {
     type: String,
     optional: true,
-    publish: true,
-    control: Upload,
-    insertableIf: canInsert,
-    editableIf: canEdit,
+    control: getComponent('Upload'),
+    insertableBy: ['members'],
+    editableBy: ['members'],
+    viewableBy: ['guests'],
     form: {
       options: {
         preset: Telescope.settings.get('cloudinaryPresets').posts // this setting refers to the transformation you want to apply to the image
@@ -87,33 +92,26 @@ Posts.addField({
     }
   }
 });
-
-// only if you use Nova v0.27.5 (not needed for Apollo version)
-PublicationUtils.addToFields(Posts.publishedFields.list, ["image"]);
 ```
 
 ## Avatar for users
 Let's say you want to enable your users to upload their own avatar. In your custom package, your new custom field could look like this: 
 ```js
 // ... your imports
-import Telescope from 'meteor/nova:lib';
+import { getComponent } from 'meteor/nova:lib';
 import Users from 'meteor/nova:users';
-import Upload from 'meteor/xavcz:nova-forms-upload'
 
-// ... your permissions
-const canInsert = user => Users.canDo(user, "users.new");
-const canEdit = Users.canEdit;
-
-// extends Users schema with a new field: 'telescope.avatar' 👁
+// extends Users schema with a new field: 'avatar' 👁
 Users.addField({
-  fieldName: 'telescope.avatar',
+  fieldName: 'avatar',
   fieldSchema: {
     type: String,
     optional: true,
-    publish: true,
-    control: Upload,
-    insertableIf: canInsert,
-    editableIf: canEdit,
+    control: getComponent('Upload'),
+    insertableBy: ['members'],
+    editableBy: ['members'],
+    viewableBy: ['guests'],
+    preload: true, // ⚠️ will preload the field for the current user!
     form: {
       options: {
         preset: Telescope.settings.get('cloudinaryPresets').avatar // this setting refers to the transformation you want to apply to the image
@@ -121,9 +119,6 @@ Users.addField({
     }
   }
 });
-
-// publish this new field, only if you use Nova v0.27.5 (not needed for Apollo version)
-PublicationUtils.addToFields(Users.publishedFields.list, ['telescope.avatar']);
 ```
 
 Adding the opportunity to upload an avatar comes with a trade-off: you also need to extend the behavior of the `Users.avatar` methods. You can do this by adding this snippet, in `custom_fields.js` for instance:
@@ -145,7 +140,7 @@ Users.avatar = {
 ## S3? Google Cloud?
 Feel free to contribute to add new features and flexibility to this package :)
 
-You are welcome to come chat about it [on the Telescope Slack chatroom](http://slack.telescopeapp.org)
+You are welcome to come chat about it [on the Nova Slack chatroom](http://slack.telescopeapp.org)
 
 ## What about `nova:cloudinary` ?
 This package and `nova:cloudinary` share a settings in common: `cloudinaryCloudName`. They are fully compatible.

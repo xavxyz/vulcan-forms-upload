@@ -72,7 +72,7 @@ Let's say you want to enhance your posts with a custom image. In your custom pac
 
 ```js
 // ... your imports
-import { getComponent } from 'meteor/nova:lib';
+import { getComponent, getSetting } from 'meteor/nova:lib';
 import Posts from 'meteor/nova:posts';
 
 // extends Posts schema with a new field: 'image' 🏖
@@ -87,7 +87,7 @@ Posts.addField({
     viewableBy: ['guests'],
     form: {
       options: {
-        preset: Telescope.settings.get('cloudinaryPresets').posts // this setting refers to the transformation you want to apply to the image
+        preset: getSetting('cloudinaryPresets').posts // this setting refers to the transformation you want to apply to the image
       },
     }
   }
@@ -98,7 +98,7 @@ Posts.addField({
 Let's say you want to enable your users to upload their own avatar. In your custom package, your new custom field could look like this: 
 ```js
 // ... your imports
-import { getComponent } from 'meteor/nova:lib';
+import { getComponent, getSetting } from 'meteor/nova:lib';
 import Users from 'meteor/nova:users';
 
 // extends Users schema with a new field: 'avatar' 👁
@@ -114,7 +114,7 @@ Users.addField({
     preload: true, // ⚠️ will preload the field for the current user!
     form: {
       options: {
-        preset: Telescope.settings.get('cloudinaryPresets').avatar // this setting refers to the transformation you want to apply to the image
+        preset: getSetting('cloudinaryPresets').avatar // this setting refers to the transformation you want to apply to the image
       },
     }
   }

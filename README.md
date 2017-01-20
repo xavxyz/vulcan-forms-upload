@@ -62,7 +62,10 @@ public: {
 
 Picture upload in Nova is now enabled! Easy-peasy, right? 👯
 
-# Custom fields
+### 5. Your custom package & custom fields
+
+Make your custom package depends on this package: open `package.js` in your custom package and add `xavcz:nova-forms-upload` as a dependency, near by the other `nova:xxx` packages.
+
 You can now use the `Upload` component as a classic form extension with [custom fields](https://www.youtube.com/watch?v=1yTT48xaSy8) like `nova:forms-tags` or `nova:embedly`.
 
 **⚠️ Note:** Don't forget to update your query fragments wherever needed after defining your custom fields, else they will never be available!
@@ -136,6 +139,8 @@ Users.avatar = {
   }
 } 
 ```
+
+Now, you also need to update the query fragments related to `User` when you want the custom avatar to show up :)
 
 ## S3? Google Cloud?
 Feel free to contribute to add new features and flexibility to this package :)

@@ -135,9 +135,9 @@ Users.avatar = {
   getUrl(user) {
     url = originalAvatarConstructor.getUrl(user);
 
-    return !!user && user.telescope && user.telescope.avatar ? user.telescope.avatar : url;
-  }
-} 
+    return !!user && user.avatar ? user.avatar : url;
+  },
+};
 ```
 
 Now, you also need to update the query fragments related to `User` when you want the custom avatar to show up :)

@@ -1,7 +1,7 @@
 Package.describe({
   name: "xavcz:nova-forms-upload",
   summary: "Telescope Nova package extending nova:forms to upload images to Cloudinary from a drop zone.",
-  version: "1.1.0",
+  version: "1.2.0",
   git: 'https://github.com/xavcz/nova-forms-upload.git'
 });
 
@@ -10,8 +10,8 @@ Package.onUse( function(api) {
   api.versionsFrom("METEOR@1.0");
 
   api.use([
-    'nova:core@1.1.0',
-    'nova:forms@1.1.0',
+    'nova:core@1.2.0',
+    'nova:forms@1.2.0',
     'fourseven:scss'
   ]);
 

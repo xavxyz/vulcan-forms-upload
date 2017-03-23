@@ -1,4 +1,4 @@
-import { Components, getSetting, registerComponent } from 'meteor/nova:lib';
+import { Components, getSetting, registerComponent } from 'meteor/vulcan:lib';
 import React, { PropTypes, Component } from 'react';
 import Dropzone from 'react-dropzone';
 import 'isomorphic-fetch'; // patch for browser which don't have fetch implemented
@@ -47,7 +47,7 @@ class Upload extends Component {
     .then(body => {
       // use the https:// url given by cloudinary
       const avatarUrl = body.secure_url;
-      
+
       // set the uploading status to false
       this.setState({
         preview: '',
@@ -55,7 +55,7 @@ class Upload extends Component {
         value: avatarUrl,
       });
 
-      // tell NovaForm to catch the value
+      // tell vulcanForm to catch the value
       this.context.addToAutofilledValues({[this.props.name]: avatarUrl});
     })
     .catch(err => console.log("err", err));
@@ -81,8 +81,8 @@ class Upload extends Component {
         <label className="control-label col-sm-3">{this.props.label}</label>
         <div className="col-sm-9">
           <div className="upload-field">
-            <Dropzone ref="dropzone" 
-              multiple={false} 
+            <Dropzone ref="dropzone"
+              multiple={false}
               onDrop={this.onDrop}
               accept="image/*"
               className="dropzone-base"
@@ -91,13 +91,13 @@ class Upload extends Component {
             >
               <div>Drop an image here, or click to select an image to upload.</div>
             </Dropzone>
-            
-            {image ? 
+
+            {image ?
               <div className="upload-state">
                 {uploading ? <span>Uploading... Preview:</span> : null}
                 {value ? <a onClick={this.clearImage}><Components.Icon name="close"/> Remove image</a> : null}
                 <img style={{height: 120}} src={image} />
-              </div> 
+              </div>
             : null}
           </div>
         </div>

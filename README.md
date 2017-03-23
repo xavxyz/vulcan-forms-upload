@@ -1,15 +1,15 @@
 # nova-upload
-🏖🔭 Telescope Nova package extending `nova:forms` to upload images to Cloudinary from a drop zone.
+🏖🔭 Vulcan package extending `vulcan:forms` to upload images to Cloudinary from a drop zone.
 
 
 ![Screenshot](https://res.cloudinary.com/xavcz/image/upload/v1471534203/Capture_d_e%CC%81cran_2016-08-17_14.22.14_ehwv0d.png)
 
-Want to add this to your Nova instance? Read below:
+Want to add this to your Vulcan instance? Read below:
 
 # Installation
 
 ### 1. Meteor package
-I would recommend that you clone this repo in your Nova's `/packages` folder. 
+I would recommend that you clone this repo in your vulcan's `/packages` folder.
 
 Then, open the `.meteor/packages` file and add at the end of the **Optional packages** section:
 `xavcz:nova-forms-upload` 
@@ -23,13 +23,13 @@ git checkout nova-classic
 ```
 
 ### 2. NPM dependency
-This package depends on the awesome `react-dropzone` ([repo](https://github.com/okonet/react-dropzone)), you need to install the dependency: 
+This package depends on the awesome `react-dropzone` ([repo](https://github.com/okonet/react-dropzone)), you need to install the dependency:
 ```
 npm install react-dropzone isomorphic-fetch
 ```
 
 ### 3. Cloudinary account
-Create a [Cloudinary account](https://cloudinary.com) if you don't have one. 
+Create a [Cloudinary account](https://cloudinary.com) if you don't have one.
 
 The upload to Cloudinary relies on **unsigned upload**:
 
@@ -48,8 +48,8 @@ Edit your `settings.json` and add inside the `public: { ... }` block the followi
 
 ```json
 public: {
-  
-  
+
+
   "cloudinaryCloudName": "YOUR_APP_NAME",
   "cloudinaryPresets": {
     "avatar": "YOUR_PRESET_ID",
@@ -71,7 +71,7 @@ You can now use the `Upload` component as a classic form extension with [custom 
 **⚠️ Note:** Don't forget to update your query fragments wherever needed after defining your custom fields, else they will never be available!
 
 ## Image for posts
-Let's say you want to enhance your posts with a custom image. In your custom package, your new custom field could look like this: 
+Let's say you want to enhance your posts with a custom image. In your custom package, your new custom field could look like this:
 
 ```js
 // ... your imports
@@ -98,7 +98,7 @@ Posts.addField({
 ```
 
 ## Avatar for users
-Let's say you want to enable your users to upload their own avatar. In your custom package, your new custom field could look like this: 
+Let's say you want to enable your users to upload their own avatar. In your custom package, your new custom field could look like this:
 ```js
 // ... your imports
 import { getComponent, getSetting } from 'meteor/nova:lib';

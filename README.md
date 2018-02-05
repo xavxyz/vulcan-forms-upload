@@ -1,4 +1,6 @@
 > Disclaimer: this package is now used internally. You shouldn't use clone this one, the code may not be up to date. ☠️
+> See https://github.com/VulcanJS/Vulcan/tree/master/packages/vulcan-forms-upload
+
 # nova-upload
 🏖🔭 Vulcan package extending `vulcan:forms` to upload images to Cloudinary from a drop zone.
 
